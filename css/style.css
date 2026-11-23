@@ -589,6 +589,7 @@ ol {
 
 .led__grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 40px;
 }
 
@@ -748,6 +749,7 @@ ol {
 
 .about__grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 36px;
 }
 
@@ -852,7 +854,7 @@ ol {
 .ticket strong {
   display: block;
   font-family: var(--font-display);
-  font-size: 1.9rem;
+  font-size: clamp(1.5rem, 6.5vw, 1.9rem);
   font-weight: 600;
   letter-spacing: .04em;
   line-height: 1.2;
