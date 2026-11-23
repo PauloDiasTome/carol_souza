@@ -54,15 +54,19 @@ const updateWords = () => {
   });
 };
 
-// Header com fundo e botão flutuante aparecem depois do topo
+// Header com fundo, barra de progresso e botão flutuante acompanham a rolagem
 const header = document.querySelector('[data-header]');
+const progress = document.querySelector('[data-progress]');
 const fab = document.querySelector('[data-fab]');
 const hero = document.querySelector('.hero');
 let bubbleShown = false;
 
 const onScroll = () => {
   const y = window.scrollY;
-  header.classList.toggle('is-scrolled', y > 24);
+  header.classList.toggle('is-scrolled', y > 16);
+
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.setProperty('--progress', scrollable > 0 ? y / scrollable : 0);
 
   const showFab = y > hero.offsetHeight * 0.6;
   fab.classList.toggle('is-visible', showFab);
@@ -101,43 +105,21 @@ const countUp = (el) => {
   requestAnimationFrame(step);
 };
 
-// Blocos entram ao aparecer na tela
+// Blocos entram e contadores disparam ao aparecer na tela
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
-    entry.target.classList.add('is-visible');
-    const counter = entry.target.querySelector('[data-count]');
-    if (counter && !reduceMotion) countUp(counter);
-    observer.unobserve(entry.target);
+    const el = entry.target;
+    if (el.dataset.count) {
+      if (!reduceMotion) countUp(el);
+    } else {
+      el.classList.add('is-visible');
+    }
+    observer.unobserve(el);
   });
 }, { threshold: 0.15 });
 
-document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
-
-// Carrossel: bolinhas indicam o card atual
-document.querySelectorAll('[data-carousel]').forEach((carousel) => {
-  const track = carousel.querySelector('.carousel__track');
-  const items = [...track.children];
-  const dots = carousel.querySelector('.carousel__dots');
-
-  const buttons = items.map((item, i) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.setAttribute('aria-label', `Ir para o card ${i + 1}`);
-    button.addEventListener('click', () => item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' }));
-    dots.append(button);
-    return button;
-  });
-
-  const update = () => {
-    const step = items[1].offsetLeft - items[0].offsetLeft;
-    const index = Math.round(track.scrollLeft / step);
-    buttons.forEach((button, i) => button.classList.toggle('is-active', i === index));
-  };
-
-  track.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
-  update();
-});
+document.querySelectorAll('[data-reveal], [data-count]').forEach((el) => observer.observe(el));
 
 // Cupom: copia e avisa
 const toast = document.querySelector('[data-toast]');
