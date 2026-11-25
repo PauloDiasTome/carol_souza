@@ -1,15 +1,12 @@
-// Número do WhatsApp só com dígitos: DDI + DDD + número (ex.: 5521999999999).
-// Enquanto estiver vazio, os botões abrem o direct do Instagram.
-const WHATSAPP_NUMBER = '';
-const INSTAGRAM_DM = 'https://ig.me/m/carolsousasc';
+// WhatsApp da Carol só com dígitos: DDI + DDD + número
+const WHATSAPP_NUMBER = '5521976431317';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Cada [data-whatsapp] leva a própria mensagem pronta
+// Cada [data-whatsapp] abre a conversa com a própria mensagem pronta.
+// Direto no api.whatsapp.com: o redirecionamento do wa.me troca emojis por "�".
 document.querySelectorAll('[data-whatsapp]').forEach((link) => {
-  link.href = WHATSAPP_NUMBER
-    ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(link.dataset.whatsapp)}`
-    : INSTAGRAM_DM;
+  link.href = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(link.dataset.whatsapp)}`;
   link.target = '_blank';
   link.rel = 'noopener';
 });

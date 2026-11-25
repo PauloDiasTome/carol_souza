@@ -470,7 +470,6 @@ ol {
   max-width: none;
   border-radius: 50%;
   object-fit: cover;
-  object-position: 50% 28%;
   box-shadow: 0 0 0 4px var(--bg);
 }
 
