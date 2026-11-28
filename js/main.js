@@ -3,10 +3,9 @@ const WHATSAPP_NUMBER = '5521976431317';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Cada [data-whatsapp] abre a conversa com a própria mensagem pronta.
-// Direto no api.whatsapp.com: o redirecionamento do wa.me troca emojis por "�".
+// Cada [data-whatsapp] abre a conversa com a própria mensagem pronta (sem emoji: a prévia do WhatsApp quebra)
 document.querySelectorAll('[data-whatsapp]').forEach((link) => {
-  link.href = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(link.dataset.whatsapp)}`;
+  link.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(link.dataset.whatsapp)}`;
   link.target = '_blank';
   link.rel = 'noopener';
 });
